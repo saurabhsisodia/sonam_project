@@ -2,7 +2,7 @@ const { query } = require('express');
 const Visitor = require('../models/visitor.model');
 
 // create the visitor
-exports.create = (req,res) =>{
+exports.create = async (req,res) =>{
 
     // req validation
     // TODO
@@ -16,10 +16,21 @@ exports.create = (req,res) =>{
         relation : req.body.relation,
         address : req.body.address,
         phone_number:req.body.phone_number,
-        visiting_date:req.body.visiting_date,
+        visit_start_date:req.body.visit_start_date,
+        visit_end_date:req.body.visit_end_date,
+
     });
 
 
+    // check if id already exist or not in db
+    const isExist = await Visitor.exists({id:req.body.id})
+
+    if (isExist){
+        res.status(400).send({
+            error:`id ${req.body.id} already exist`
+        })
+        return
+    }
     // save visitor details in database
 
     visitor.save()
@@ -74,7 +85,8 @@ exports.update = (req,res)=>{
             relation : req.body.relation,
             address : req.body.address,
             phone_number:req.body.phone_number,
-            visiting_date:req.body.visiting_date,
+            visit_start_date:req.body.visit_start_date,
+            visit_end_date:req.body.visit_end_date,
         }
         Visitor.findOneAndUpdate(query,newData,{upsert: true},
             function(err, visitor){

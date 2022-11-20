@@ -9,8 +9,10 @@ const Visitor = mongoose.Schema(
         prisoner_name : String,
         relation : String,
         address : String,
-        phone_number : String,
-        visiting_date : String,
+        phone_number : Number,
+        visit_start_date : String,
+        visit_end_date : String
+
     }
 )
 

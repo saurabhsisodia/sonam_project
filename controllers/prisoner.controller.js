@@ -1,17 +1,12 @@
 const Prisoner = require('../models/prisoner.model');
 
 // create the prisoner
-exports.create = (req,res) =>{
+exports.create = async (req,res) =>{
 
     // req validation
     // TODO
 
     // create a prisoner model object
-    console.log(req.body.id);
-    console.log(req.body.name);
-    console.log(req.body.address);
-    console.log(req.body.crimes);
-    console.log(req.body.release_date);
 
     const prisoner = new Prisoner({
         id : req.body.id,
@@ -23,8 +18,15 @@ exports.create = (req,res) =>{
         release_date : req.body.release_date
     });
 
+     // check if id already exist or not in db
+    const isExist = await Prisoner.exists({id:req.body.id})
 
-    // save prisoner details in database
+    if (isExist){
+        res.status(400).send({
+            error:`id ${req.body.id} already exist`
+        })
+        return
+    }
 
     prisoner.save()
     .then(data=>{

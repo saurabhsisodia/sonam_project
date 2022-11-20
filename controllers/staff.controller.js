@@ -2,7 +2,7 @@ const { query } = require('express');
 const Staff = require('../models/staff.model');
 
 // create the staff
-exports.create = (req,res) =>{
+exports.create = async (req,res) =>{
 
     // req validation
     // TODO
@@ -15,7 +15,15 @@ exports.create = (req,res) =>{
         position : req.body.position
     });
 
+    // check if id already exist or not in db
+    const isExist = await Staff.exists({id:req.body.id})
 
+    if (isExist){
+        res.status(400).send({
+            error:`id ${req.body.id} already exist`
+        })
+        return
+    }
     // save staff details in database
 
     staff.save()

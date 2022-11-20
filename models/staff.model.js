@@ -7,7 +7,7 @@ const Staff = mongoose.Schema(
         id : Number,
         name : String,
         address : String,
-        phone_number : String,
+        phone_number : Number,
         position : String,
     }
 )
